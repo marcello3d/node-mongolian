@@ -1,0 +1,19 @@
+{
+  "name": "mongolian",
+  "description": "Mongolian DeadBeef is a Mongo DB driver for node.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/marcello3d/node-mongolian",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/marcello3d/node-mongolian.git"
+  },
+  "author": "Marcello Bastéa-Forte <marcello@cellosoft.com> (http://marcello.cellosoft.com/)",
+  "main": "mongolian.js",
+  "keywords": ["mongo", "mongodb", "database", "db", "nosql"],
+  "dependencies": {
+    "mongodb": ">=0.7.9"
+  },
+  "engines": {
+    "node": ">=0.4.0"
+  }
+}
