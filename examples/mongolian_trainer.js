@@ -9,6 +9,10 @@ var db = server.db("mongolian_trainer"),
     medium = db.collection("medium"),
     large = db.collection("large")
 
+small.ensureIndex({foo:1})
+medium.ensureIndex({foo:1})
+large.ensureIndex({foo:1})
+
 function fillCollection(collection, max) {
     collection.count(function(err,count) {
         console.log(collection+" count = "+count)
@@ -47,3 +51,50 @@ small.find().limit(100).sort({foo:1}).toArray(asyncLog('small find sorted limit 
 small.find().batchSize(10).toArray(asyncLog('medium find all'))
 medium.findOne(asyncLog('medium findOne'))
 
+////// Grid FS
+
+var gridfs = db.gridfs()
+
+var stream = gridfs.create("hello.txt").writeStream()
+
+require("fs").createReadStream(__filename).pipe(stream)
+
+stream.on('close', function() {
+    gridfs.findOne("hello.txt", function (err, file) {
+        var read = file.readStream()
+        read.on('data', function (chunk) {
+            console.log("chunk = "+chunk)
+        })
+        read.on('end', function (chunk) {
+            console.log("all done")
+        })
+    })
+})
+
+function funBuffer(size) {
+    var buffer = new Buffer(size)
+    for (var i=0; i<size; i++) {
+        if (i%1000 == 0) buffer[i++] = 13
+        buffer[i] = 97 + (i%26)
+    }
+    return buffer
+}
+var stream2 = gridfs.create("hello2.txt").writeStream()
+stream2.write(new Buffer("hello world 100"))
+stream2.write(funBuffer(100))
+stream2.write(new Buffer("hello world 10000"))
+stream2.write(funBuffer(10000))
+stream2.write(new Buffer("hello world 500000"))
+stream2.write(funBuffer(500000))
+stream2.write(new Buffer("hello world 500000 again"))
+stream2.write(funBuffer(500000))
+stream2.end()
+gridfs.findOne("hello2.txt", function (err, file) {
+    var read = file.readStream()
+    read.on('data', function (chunk) {
+        console.log("chunk = "+chunk)
+    })
+    read.on('end', function (chunk) {
+        console.log("all done")
+    })
+})
