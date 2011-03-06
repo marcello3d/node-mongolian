@@ -24,16 +24,16 @@ the wheel, much of the Mongolian DeadBeef API is inspired by the [mongodb shell]
 High level principles:
 
 * Less is more
- * Nothing is added without careful consideration
- * Remove everything but the essentials
- * Each refactor should remove as much unnecessary lines of code as possible
+  * Nothing is added without careful consideration
+  * Remove everything but the essentials
+  * Each refactor should remove as much unnecessary lines of code as possible
 * Fail early and often
- * If I can easily detect a programmer error, an exception will be thrown
+  * If I can easily detect a programmer error, an exception will be thrown
 
 Notes:
 
 * mongodb is pretty simple, much of its functionality is defined as queries on special databases
- * This allows for lots of code reuse
+  * This allows for lots of code reuse
 * Avoid callbacks unless they are absolutely necessary
 
 Basics
@@ -87,7 +87,7 @@ Contributing
 ------------
 Try it out and send me feedback! That's the best help I could use right now.
 
-license
+License
 -------
 Mongolian DeadBeef is open source software under the [zlib license][3].
 
