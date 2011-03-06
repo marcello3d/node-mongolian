@@ -22,17 +22,19 @@ Not a fan of existing asynchronous mongodb apis for node.js, I set out to write 
 the wheel, much of the Mongolian DeadBeef API is inspired by the [mongodb shell][1].
 
 High level principles:
-*Less is more
-**Nothing is added without careful consideration
-**Remove everything but the essentials
-**Each refactor should remove as much unnecessary lines of code as possible
-*Fail early and often
-**If I can easily detect a programmer error, an exception will be thrown
+
+* Less is more
+ * Nothing is added without careful consideration
+ * Remove everything but the essentials
+ * Each refactor should remove as much unnecessary lines of code as possible
+* Fail early and often
+ * If I can easily detect a programmer error, an exception will be thrown
 
 Notes:
-*mongodb is pretty simple, much of its functionality is defined as queries on special databases
-**This allows for lots of code reuse
-*Avoid callbacks unless they are absolutely necessary
+
+* mongodb is pretty simple, much of its functionality is defined as queries on special databases
+ * This allows for lots of code reuse
+* Avoid callbacks unless they are absolutely necessary
 
 Basics
 ------
@@ -74,12 +76,12 @@ Examples
 
 Todo
 ----
-*Various utility methods
-*GridFS
-*Unit tests
-*Documentation
-*Connection pooling
-*Cleanup
+
+* Various utility methods
+* Unit tests
+* Documentation
+* Connection pooling
+* Cleanup
 
 Contributing
 ------------
