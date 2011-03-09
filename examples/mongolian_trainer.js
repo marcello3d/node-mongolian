@@ -9,9 +9,9 @@ var db = server.db("mongolian_trainer"),
     medium = db.collection("medium"),
     large = db.collection("large")
 
-small.ensureIndex({foo:1})
-medium.ensureIndex({foo:1})
-large.ensureIndex({foo:1})
+small.ensureIndex({foo:1},asyncLog("ensuredIndex!"))
+medium.ensureIndex({foo:1},asyncLog("ensuredIndex!"))
+large.ensureIndex({foo:1},asyncLog("ensuredIndex!"))
 
 function fillCollection(collection, max) {
     collection.count(function(err,count) {
@@ -36,7 +36,7 @@ fillCollection(large, 50000)
 function asyncLog(prefix) {
     return function(err,value) {
         if (err) {
-            console.warn("Error getting "+prefix+':',err, err.stack)
+            console.warn("Error getting "+prefix+': '+err, err.stack)
         } else {
             console.log(prefix+':',value)
         }
