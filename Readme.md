@@ -1,3 +1,5 @@
+Forked from https://github.com/marcello3d/node-mongolian/blob/master/lib/db.js by marcello3d
+
 Mongolian DeadBeef
 ====================
 Mongolian DeadBeef is an awesome Mongo DB node.js driver that sits on top of node-mongodb-native and attempts to closely
