@@ -46,8 +46,9 @@ function asyncLog(prefix) {
 server.dbNames(asyncLog("db names"))
 db.collectionNames(asyncLog("collection names"))
 
-small.find({foo:{$lte:0.5}},{foo:true,_id:false}).limit(49).toArray(asyncLog('small find limit 49'))
-small.find().limit(100).sort({foo:1}).toArray(asyncLog('small find sorted limit 50'))
+small.find().limit(5).toArray(asyncLog('small find limit 5'))
+small.find({foo:{$lte:0.5}},{foo:true,_id:false}).limit(49).toArray(asyncLog('small find foo<0.5 limit 49'))
+small.find().limit(100).sort({foo:1}).toArray(asyncLog('small find sorted limit 100'))
 small.find().batchSize(10).toArray(asyncLog('medium find all'))
 medium.findOne(asyncLog('medium findOne'))
 
@@ -63,9 +64,9 @@ stream.on('close', function() {
     gridfs.findOne("hello.txt", function (err, file) {
         var read = file.readStream()
         read.on('data', function (chunk) {
-            console.log("chunk = "+chunk)
+            console.log("chunk["+chunk.length+"] = <"+chunk+">")
         })
-        read.on('end', function (chunk) {
+        read.on('end', function() {
             console.log("all done")
         })
     })
@@ -91,10 +92,10 @@ stream2.write(funBuffer(500000))
 stream2.end()
 gridfs.findOne("hello2.txt", function (err, file) {
     var read = file.readStream()
-    read.on('data', function (chunk) {
-        console.log("chunk = "+chunk)
+    read.on('data', function(chunk) {
+        console.log("chunk["+chunk.length+"] = <"+chunk+">")
     })
-    read.on('end', function (chunk) {
+    read.on('end', function() {
         console.log("all done")
     })
 })
