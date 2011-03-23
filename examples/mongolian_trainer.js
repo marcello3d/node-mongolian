@@ -1,5 +1,7 @@
 /* Mongolian DeadBeef by Marcello Bastea-Forte - zlib license */
 
+var fs = require("fs")
+
 var Mongolian = require('mongolian')
 
 var server = new Mongolian
@@ -9,30 +11,32 @@ var db = server.db("mongolian_trainer"),
     medium = db.collection("medium"),
     large = db.collection("large")
 
-small.ensureIndex({foo:1},asyncLog("ensuredIndex!"))
-medium.ensureIndex({foo:1},asyncLog("ensuredIndex!"))
-large.ensureIndex({foo:1},asyncLog("ensuredIndex!"))
+//db.drop(asyncLog("dropped database"))
 
-function fillCollection(collection, max) {
+small.ensureIndex({foo:1},asyncLog("ensuredIndex!"))
+medium.ensureIndex({foo:1})
+large.ensureIndex({foo:1})
+
+// Adds some junk to the database
+function fillCollection(collection, max, callback) {
     collection.count(function(err,count) {
         console.log(collection+" count = "+count)
         while (count < max) {
             var toInsert = []
             while (count < max) {
                 toInsert.push({ foo: Math.random(), index: count++ })
-                if (toInsert.length > 500) {
+                if (toInsert.length == 300) {
                     break
                 }
             }
+            console.log("inserting "+toInsert.length+" document(s) into "+collection)
             collection.insert(toInsert)
         }
+        callback()
     })
 }
 
-fillCollection(small, 50)
-fillCollection(medium, 500)
-fillCollection(large, 50000)
-
+// Creates function(err,value) that prints out the result to console
 function asyncLog(prefix) {
     return function(err,value) {
         if (err) {
@@ -43,25 +47,46 @@ function asyncLog(prefix) {
     }
 }
 
+
+fillCollection(small, 50, function() {
+    small.find().limit(5).toArray(asyncLog('small find limit 5'))
+    small.find({foo:{$lte:0.5}},{foo:true,_id:false}).limit(49).toArray(asyncLog('small find foo<0.5 limit 49'))
+    small.find().limit(100).sort({foo:1}).toArray(asyncLog('small find sorted limit 100'))
+    small.find().batchSize(10).toArray(asyncLog('small find all, batchsize=10'))
+})
+fillCollection(medium, 500, function() {
+    medium.findOne(asyncLog('medium findOne'))
+})
+fillCollection(large, 50000, function() {
+    large.findOne({foo:{$gt:0.5}}, asyncLog('large foo>0.5 findOne'))
+
+})
+
+// Get a list of databases on this server
 server.dbNames(asyncLog("db names"))
+
+// Get a list of collections on this database (should be [ 'system.indexes', 'small', 'medium', 'large' ])
 db.collectionNames(asyncLog("collection names"))
 
-small.find().limit(5).toArray(asyncLog('small find limit 5'))
-small.find({foo:{$lte:0.5}},{foo:true,_id:false}).limit(49).toArray(asyncLog('small find foo<0.5 limit 49'))
-small.find().limit(100).sort({foo:1}).toArray(asyncLog('small find sorted limit 100'))
-small.find().batchSize(10).toArray(asyncLog('medium find all'))
-medium.findOne(asyncLog('medium findOne'))
 
 ////// Grid FS
 
 var gridfs = db.gridfs()
 
-var stream = gridfs.create("hello.txt").writeStream()
+// Create new file write stream
+var stream = gridfs.create({
+    filename:"License",
+    contentType: "text/plain"
+}).writeStream()
 
-require("fs").createReadStream(__filename).pipe(stream)
+// Pipe license file to gridfile
+fs.createReadStream(__dirname+'/../LICENSE').pipe(stream)
 
+// Read file back from gridfs
 stream.on('close', function() {
-    gridfs.findOne("hello.txt", function (err, file) {
+    gridfs.findOne("License", function (err, file) {
+        if (err) throw err
+        console.log("opened file:",file)
         var read = file.readStream()
         read.on('data', function (chunk) {
             console.log("chunk["+chunk.length+"] = <"+chunk+">")
@@ -72,6 +97,7 @@ stream.on('close', function() {
     })
 })
 
+// Generates alphabet buffers
 function funBuffer(size) {
     var buffer = new Buffer(size)
     for (var i=0; i<size; i++) {
@@ -80,7 +106,9 @@ function funBuffer(size) {
     }
     return buffer
 }
-var stream2 = gridfs.create("hello2.txt").writeStream()
+
+// Create a new write stream and manually write out data
+var stream2 = gridfs.create("not-so-random-text.txt").writeStream()
 stream2.write(new Buffer("hello world 100"))
 stream2.write(funBuffer(100))
 stream2.write(new Buffer("hello world 10000"))
@@ -90,10 +118,14 @@ stream2.write(funBuffer(500000))
 stream2.write(new Buffer("hello world 500000 again"))
 stream2.write(funBuffer(500000))
 stream2.end()
-gridfs.findOne("hello2.txt", function (err, file) {
+
+// Read the file back in...
+gridfs.findOne("not-so-random-text.txt", function (err, file) {
+    if (err) throw err
+    console.log("opened file:",file)
     var read = file.readStream()
     read.on('data', function(chunk) {
-        console.log("chunk["+chunk.length+"] = <"+chunk+">")
+        console.log("chunk["+chunk.length+"] = <"+(chunk.length > 100 ? chunk.slice(0,100) + "..." : chunk)+">")
     })
     read.on('end', function() {
         console.log("all done")
