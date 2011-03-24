@@ -5,7 +5,7 @@ approximate the [mongodb shell][1].
 
 Introduction
 ------------
-Mongolian DeadBeef and its documentaiton is super under construction! Go check out [examples/mongolian_trainer.js][2]
+Mongolian DeadBeef and its documentation is super under construction! Go check out [examples/mongolian_trainer.js][2]
 and the rest of the source!
 
 Installation
@@ -13,8 +13,12 @@ Installation
 **WARNING! The API is super experimental, and will be adding, removing, and changing the API regularly. Use at your own
 risk**
 
-You can either clone the source and install with `npm install`, or install the latest published version from npm with
+You can either clone the source and install with `npm link`, or install the latest published version from npm with
 `npm install mongolian`.
+
+Running Tests
+-------------
+Run the tests with `npm test`.
 
 Motivation
 ----------
@@ -78,14 +82,15 @@ Todo
 ----
 
 * Various utility methods
-* Unit tests
+* More unit tests
+* Authentication
 * Documentation
 * Connection pooling
 * Cleanup
 
 Contributing
 ------------
-Try it out and send me feedback! That's the best help I could use right now.
+Try it out and send me feedback! That's the best help I could use right now. Unit tests are good, too.
 
 License
 -------

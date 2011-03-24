@@ -11,8 +11,13 @@
   "main": "mongolian.js",
   "keywords": ["mongo", "mongodb", "database", "db", "nosql"],
   "dependencies": {
-    "mongodb": ">=0.9.1",
-    "vows": ">=0.5.8"
+    "mongodb": ">=0.9.1"
+  },
+  "devDependencies": {
+    "vows": "~0.5"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/vows --spec"
   },
   "engines": {
     "node": ">=0.4.0"
