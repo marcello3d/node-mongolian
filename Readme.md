@@ -75,8 +75,14 @@ Examples
     })
 
     // Document cursors
-    posts.find().limit(5).sort({ created: 1 }).toArray(function (err, array) { })
-    posts.find({ title: /^hal/ }).forEach(function (err, post) { })
+    posts.find().limit(5).sort({ created: 1 }).toArray(function (err, array) {
+        // do something with the array
+    })
+    posts.find({ title: /^hal/ }).forEach(function (post) {
+        // do something with a single post
+    }, function(err) {
+        // handle errors/completion
+    })
 
 Todo
 ----
