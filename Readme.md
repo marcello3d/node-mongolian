@@ -55,10 +55,11 @@ Examples
 
     // Create a server instance with default host and port
     var server = new Mongolian
-
+    
     // Get database
     var db = server.db("awesome_blog")
-
+    // Authenticate
+    db.auth("us3r", "passw0rd")
     // Get some collections
     var posts = db.collection("posts")
     var comments = db.collection("comments")
@@ -85,7 +86,7 @@ Todo
 
 * Various utility methods
 * More unit tests
-* Authentication
+* Authentication - Added (Experimental)
 * Documentation
 * Connection pooling
 * Cleanup

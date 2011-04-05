@@ -1,22 +1,28 @@
 {
-  "name": "mongolian",
-  "description": "Mongolian DeadBeef is an awesome Mongo DB node.js driver",
-  "version": "0.1.5",
-  "homepage": "https://github.com/thomblake/node-mongolian",
-  "repository": "git://github.com/thomblake/node-mongolian.git",
-  "author": "Thom Blake <webmaster@thomblake.com> (http://thomblake.com/)",
-  "main": "mongolian.js",
-  "keywords": ["mongo", "mongodb", "database", "db", "nosql"],
-  "dependencies": {
-    "mongodb": ">=0.9.1"
-  },
-  "devDependencies": {
-    "vows": "~0.5"
-  },
-  "scripts": {
-    "test": "node_modules/.bin/vows --spec"
-  },
-  "engines": {
-    "node": ">=0.4.0"
-  }
+name: "mongolian"
+description: "Mongolian DeadBeef is an awesome Mongo DB node.js driver"
+version: "0.1.7-unstable"
+homepage: "https://github.com/marcello3d/node-mongolian"
+repository: "git://github.com/marcello3d/node-mongolian.git"
+author: "Marcello Bastéa-Forte <marcello@cellosoft.com> (http://marcello.cellosoft.com/)"
+main: "mongolian.js"
+-keywords: [
+"mongo"
+"mongodb"
+"database"
+"db"
+"nosql"
+]
+-dependencies: {
+mongodb: ">=0.9.1"
+}
+-devDependencies: {
+vows: "~0.5"
+}
+-scripts: {
+test: "node_modules/.bin/vows --spec"
+}
+-engines: {
+node: ">=0.4.0"
+}
 }
