@@ -97,6 +97,31 @@ stream.on('close', function() {
     })
 })
 
+
+// Create new file write stream
+var stream2 = gridfs.create({
+    filename:"License",
+    contentType: "text/plain"
+}).writeStream()
+
+// Pipe license file to gridfile
+fs.createReadStream(__dirname+'/../LICENSE').pipe(stream)
+
+// Read file back from gridfs
+stream2.on('close', function() {
+    gridfs.findOne("License", function (err, file) {
+        if (err) throw err
+        console.log("opened file:",file)
+        var read = file.readStream()
+        read.on('data', function (chunk) {
+            console.log("chunk["+chunk.length+"] = <"+chunk+">")
+        })
+        read.on('end', function() {
+            console.log("all done")
+        })
+    })
+})
+
 // Generates alphabet buffers
 function funBuffer(size) {
     var buffer = new Buffer(size)
@@ -108,26 +133,29 @@ function funBuffer(size) {
 }
 
 // Create a new write stream and manually write out data
-var stream2 = gridfs.create("not-so-random-text.txt").writeStream()
-stream2.write(new Buffer("hello world 100"))
-stream2.write(funBuffer(100))
-stream2.write(new Buffer("hello world 10000"))
-stream2.write(funBuffer(10000))
-stream2.write(new Buffer("hello world 500000"))
-stream2.write(funBuffer(500000))
-stream2.write(new Buffer("hello world 500000 again"))
-stream2.write(funBuffer(500000))
-stream2.end()
+var stream3 = gridfs.create("not-so-random-text.txt").writeStream()
 
-// Read the file back in...
-gridfs.findOne("not-so-random-text.txt", function (err, file) {
-    if (err) throw err
-    console.log("opened file:",file)
-    var read = file.readStream()
-    read.on('data', function(chunk) {
-        console.log("chunk["+chunk.length+"] = <"+(chunk.length > 100 ? chunk.slice(0,100) + "..." : chunk)+">")
-    })
-    read.on('end', function() {
-        console.log("all done")
+stream3.on('close', function() {
+    // Read the file back in...
+    gridfs.findOne("not-so-random-text.txt", function (err, file) {
+        if (err) throw err
+        console.log("opened file:",file)
+        var read = file.readStream()
+        read.on('data', function(chunk) {
+            console.log("chunk["+chunk.length+"] = <"+(chunk.length > 100 ? chunk.slice(0,100) + "..." : chunk)+">")
+        })
+        read.on('end', function() {
+            console.log("all done")
+        })
     })
 })
+
+stream3.write(new Buffer("hello world 100"))
+stream3.write(funBuffer(100))
+stream3.write(new Buffer("hello world 10000"))
+stream3.write(funBuffer(10000))
+stream3.write(new Buffer("hello world 500000"))
+stream3.write(funBuffer(500000))
+stream3.write(new Buffer("hello world 500000 again"))
+stream3.write(funBuffer(500000))
+stream3.end()

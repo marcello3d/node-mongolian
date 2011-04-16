@@ -316,6 +316,99 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                     }
                 }
             }
+        },
+        "and gridfs 'testfs',": {
+            topic: function(db) {
+                return db.gridfs('testfs')
+            },
+            "create file 'foo'": {
+                topic: function (gridfs) {
+                    var stream = gridfs.create('foo').writeStream()
+                    var callback = this.callback
+                    stream.once('close',function() {
+                        callback()
+                    })
+                    stream.once('error',this.callback)
+                    stream.end("Hello world!")
+                },
+                "and ": {
+                    topic: function(gridfs) {
+                        gridfs.find().count(this.callback)
+                    },
+                    "file count is 1": function(count) {
+                        assert.equal(count, 1)
+                    }
+                },
+                "and findOne('foo')": {
+                    topic: function(gridfs) {
+                        gridfs.findOne('foo', this.callback)
+                    },
+                    "succeeds": function(file) {
+                        assert.isObject(file)
+                    },
+                    "file.length is 12": function(file) {
+                        assert.isObject(file)
+                        assert.length(file, 12)
+                    },
+                    "and reading stream into string": {
+                        topic: function(file) {
+                            var stream = file.readStream()
+                            var text = ''
+                            var callback = this.callback
+                            stream.on('data',function(chunk) { text += chunk.toString() })
+                            stream.on('error', callback)
+                            stream.on('end',function() { callback(null,text) })
+                        },
+                        "text is 'Hello World!'": function(text) {
+                            assert.equal(text, 'Hello world!')
+                        },
+                        "create second file 'foo'": {
+                            topic: function (text,file,gridfs) {
+                                var stream = gridfs.create('foo').writeStream()
+                                var callback = this.callback
+                                stream.once('close',function() {
+                                    callback(null)
+                                })
+                                stream.once('error',this.callback)
+                                stream.end("Adios, space cowboy!")
+                            },
+                            "and ": {
+                                topic: function(text,file,gridfs) {
+                                    gridfs.find().count(this.callback)
+                                },
+                                "file count is still 1": function(count) {
+                                    assert.equal(count, 1)
+                                }
+                            },
+                            "and findOne('foo')": {
+                                topic: function(text,file,gridfs) {
+                                    gridfs.findOne('foo', this.callback)
+                                },
+                                "succeeds": function(file) {
+                                    assert.isObject(file)
+                                },
+                                "file.length is 20": function(file) {
+                                    assert.isObject(file)
+                                    assert.length(file, 20)
+                                },
+                                "and reading stream into string": {
+                                    topic: function(file) {
+                                        var stream = file.readStream()
+                                        var text = ''
+                                        var callback = this.callback
+                                        stream.on('data',function(chunk) { text += chunk.toString() })
+                                        stream.on('error',this.callback)
+                                        stream.on('end',function() { callback(null,text) })
+                                    },
+                                    "text is 'Hello World!'": function(text) {
+                                        assert.equal(text, 'Adios, space cowboy!')
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }).export(module)
