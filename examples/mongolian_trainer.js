@@ -68,6 +68,32 @@ server.dbNames(asyncLog("db names"))
 // Get a list of collections on this database (should be [ 'system.indexes', 'small', 'medium', 'large' ])
 db.collectionNames(asyncLog("collection names"))
 
+////// Map reduce
+large.mapReduce(
+    function map() {
+        emit(this.foo, {
+            count:1,
+            sum: this.count
+        })
+    },
+    function reduce(key, values) {
+        var count = 0, sum = 0
+        values.forEach(function(value) {
+          count += value.count
+          sum += values.sum
+        })
+        return {
+            count:count,
+            sum:sum
+        }
+    },{
+        out: 'periscope'
+    },function (error, result) {
+        result.find().toArray(asyncLog('map reduce result'))
+    }
+)
+
+
 
 ////// Grid FS
 
