@@ -411,4 +411,32 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
             }
         }
     }
+//,
+//    "with a clean DB 'testauth'": {
+//        topic: function() {
+//            var db = new Mongolian({ keepAlive:1 }).db('mongolian_test_auth')
+//            var callback = this.callback
+//            db.drop(function(err) { callback(err, !err && db) })
+//        },
+//        "is not null": function (db) {
+//            assert.isObject(db)
+//        },
+//        "and try to find something": {
+//            topic: function(db) {
+//                db.collection("hello").find().toArray(this.callback)
+//            },
+//            "succeeds": function(result) {
+//                assert.isArray(result)
+//            }
+//        },
+//        "add user": {
+//            topic: function(db) {
+//                db.addUser("allo", "there", this.callback)
+//            },
+//            "succeeded":function(result) {
+//                assert.isObject(result)
+//            }
+//
+//        }
+//    }
 }).export(module)
