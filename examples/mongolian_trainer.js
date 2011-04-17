@@ -131,7 +131,7 @@ var stream2 = gridfs.create({
 }).writeStream()
 
 // Pipe license file to gridfile
-fs.createReadStream(__dirname+'/../LICENSE').pipe(stream)
+fs.createReadStream(__dirname+'/../LICENSE').pipe(stream2)
 
 // Read file back from gridfs
 stream2.on('close', function() {
