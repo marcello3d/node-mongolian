@@ -71,9 +71,9 @@ db.collectionNames(asyncLog("collection names"))
 ////// Map reduce
 large.mapReduce(
     function map() {
-        emit(this.foo, {
+        emit('count', {
             count:1,
-            sum: this.count
+            sum: this.foo
         })
     },
     function reduce(key, values) {
