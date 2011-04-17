@@ -84,12 +84,52 @@ Examples
         // handle errors/completion
     })
 
+Extended Examples
+-----------------
+    // Create a server with a specific host/port
+    var server = new Mongolian({
+        host:"mongo.example.com",
+        port:12345
+    })
+
+    // Create a server with a 15 second connection keep-alive
+    var server = new Mongolian({ keepAlive:15000 })
+
+
+    // Authenticate a database
+    db.auth(username, password)
+
+
+    // GridFS
+    var gridfs = db.gridfs()
+
+    // Writing to GridFS consists of creating a GridFS file:
+    var file = gridfs.create({
+        filename:"License",
+        contentType:"text/plain"
+    })
+    // And getting writable Stream (see http://nodejs.org/docs/v0.4/api/streams.html#writable_Stream )
+    var stream = file.writeStream()
+
+    // You can then pipe a local file to that stream easily with:
+    fs.createReadStream('LICENSE').pipe(stream)
+
+    // Reading a file from GridFS is similar:
+    gridfs.findOne("License", function (err, file) {
+        if (!err && file) {
+            // Get the read stream:
+            var stream = file.readStream()
+
+            // You could then pipe the file out to a http response, for example:
+            stream.pipe(httpResponse)
+        }
+    })
+
 Todo
 ----
 
 * Various utility methods
 * More unit tests
-* Authentication
 * Documentation
 * Connection pooling
 * Cleanup
