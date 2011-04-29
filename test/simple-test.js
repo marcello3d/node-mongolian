@@ -8,7 +8,7 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
         topic: function () {
             var db = new Mongolian({ keepAlive: 1 }).db('mongolian_test')
             var callback = this.callback
-            db.drop(function(err) { callback(err, !err && db) })
+            db.dropDatabase(function(err) { callback(err, !err && db) })
         },
         "is not null": function (db) {
             assert.isObject(db)

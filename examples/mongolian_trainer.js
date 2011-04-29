@@ -11,7 +11,7 @@ var db = server.db("mongolian_trainer"),
     medium = db.collection("medium"),
     large = db.collection("large")
 
-//db.drop(asyncLog("dropped database"))
+//db.dropDatabase(asyncLog("dropped database"))
 
 small.ensureIndex({foo:1},asyncLog("ensuredIndex!"))
 medium.ensureIndex({foo:1})
