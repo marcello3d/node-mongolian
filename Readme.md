@@ -1,5 +1,5 @@
 Mongolian DeadBeef
-====================
+==================
 Mongolian DeadBeef is an awesome Mongo DB node.js driver that sits on top of node-mongodb-native and attempts to closely
 approximate the [mongodb shell][1].
 
@@ -124,6 +124,126 @@ Extended Examples
             stream.pipe(httpResponse)
         }
     })
+
+Mongodb Shell Command Support
+-----------------------------
+
+Nearly all commands are identical in syntax to the mongodb shell. However, asynchronous commands that go to the server
+will have an _optional_ node.js style callback parameter.
+
+Currently most commands starting with `get` are named without the `get`. Some of the getters are implemented as values
+instead of functions.
+
++ <span style="color:green">Green functions</span> are supported
++ <span style="color:orange">Orange functions</span> are supported with different syntax
++ Black functions are not yet supported
+
+There will likely be methods below that are never supported by Mongolian DeadBeef, since I'm targetting a slightly
+different use case.
+
+### Databases
+From http://api.mongodb.org/js/1.8.1/symbols/src/shell_db.js.html
+
++ <code><span style="color:green">db.addUser</span>(username, password[, readOnly=false][, callback])</code>
++ <code><span style="color:green">db.auth</span>(username, password)</code>
++ <code>db.cloneDatabase(fromhost)</code>
++ <code>db.commandHelp(name)</code> returns the help for the command
++ <code>db.copyDatabase(fromdb, todb, fromhost)</code>
++ <code>db.createCollection(name, { size : ..., capped : ..., max : ... } )</code>
++ <code>db.currentOp()</code> displays the current operation in the db
++ <code><span style="color:green">db.dropDatabase</span>()</code> - see callback note below
++ <code><span style="color:green">db.eval</span>(func, args[, callback])</code> run code server-side - see callback note below
++ <code><span style="color:orange">db.getCollection</span>(cname)</code> implemented as <code><span style="color:green">db.collection</span>(cname)</code>
++ <code><span style="color:orange">db.getCollectionNames</span>()</code> implemented as <code><span style="color:green">db.collectionNames</span>(callback)</code>
++ <code>db.getLastError()</code> - just returns the err msg string
++ <code><span style="color:orange">db.getLastErrorObj</span>()</code> implemented as <code><span style="color:green">db.lastError</span>(callback)</code> - return full status object
++ <code><span style="color:orange">db.getMongo</span>()</code> get the server connection object implemented as <code><span style="color:green">db.server</span></code>
++ <code>db.getMongo().setSlaveOk()</code> allow this connection to read from the nonmaster member of a replica pair
++ <code><span style="color:orange">db.getName</span>()</code> implemented as <code><span style="color:green">db.name</span></code>
++ <code>db.getPrevError()</code> _(deprecated?)_
++ <code>db.getProfilingStatus()</code> - returns if profiling is on and slow threshold
++ <code>db.getReplicationInfo()</code>
++ <code>db.getSiblingDB(name)</code> get the db at the same server as this one
++ <code>db.isMaster()</code> check replica primary status
++ <code>db.killOp(opid)</code> kills the current operation in the db
++ <code>db.listCommands()</code> lists all the db commands
++ <code>db.printCollectionStats()</code>
++ <code>db.printReplicationInfo()</code>
++ <code>db.printSlaveReplicationInfo()</code>
++ <code>db.printShardingStatus()</code>
++ <code><span style="color:green">db.removeUser</span>(username[, callback])</code> - see callback note below
++ <code>db.repairDatabase()</code>
++ <code>db.resetError()</code>
++ <code><span style="color:green">db.runCommand</span>(cmdObj[, callback])</code> run a database command. <strike>if cmdObj is a string, turns it into { cmdObj : 1 }</strike>
++ <code>db.serverStatus()</code>
++ <code>db.setProfilingLevel(level,<slowms>)</code> 0=off 1=slow 2=all
++ <code>db.shutdownServer()</code>
++ <code>db.stats()</code>
++ <code>db.version()</code> current version of the server
+
+### Collections
+From http://api.mongodb.org/js/1.8.1/symbols/src/shell_collection.js.html
+
++ <code>collection.find().help()</code> - show DBCursor help
++ <code><span style="color:green">collection.count</span>(callback)</code>
++ <code>collection.dataSize()</code>
++ <code>collection.distinct( key )</code> - eg. collection.distinct( 'x' )</code>
++ <code><span style="color:green">collection.drop</span>([callback])</code> drop the collection - see callback note below
++ <code><span style="color:green">collection.dropIndex</span>(name[, callback])</code> - see callback note below
++ <code>collection.dropIndexes()</code>
++ <code><span style="color:green">collection.ensureIndex</span>(keypattern[,options][, callback])</code> - options is an object with these possible fields: name, unique, dropDups - see callback note below
++ <code>collection.reIndex()</code>
++ <code><span style="color:green">collection.find</span>([query],[fields])</code> - query is an optional query filter. fields is optional set of fields to return.
+                                          e.g. <code>collection.find( {x:77} , {name:1, x:1} )</code> - returns a cursor object
++ <code><span style="color:green">collection.find(...).count</span>()</code>
++ <code><span style="color:green">collection.find(...).limit</span>(n)</code>
++ <code><span style="color:green">collection.find(...).skip</span>(n)</code>
++ <code><span style="color:green">collection.find(...).sort</span>(...)</code>
++ <code><span style="color:green">collection.findOne</span>([query][callback])</code>
++ <code><span style="color:green">collection.findAndModify</span>( { update : ... , remove : bool [, query: {}, sort: {}, 'new': false] } )</code>
++ <code><span style="color:orange">collection.getDB</span>()</code> get DB object associated with collection implemented as <code><span style="color:green">collection.db</span></code>
++ <code><span style="color:orange">collection.getIndexes</span>()</code> implemented as <code><span style="color:green">collection.indexes</span>(callback)</code>
++ <code>collection.group( { key : ..., initial: ..., reduce : ...[, cond: ...] } )</code>
++ <code><span style="color:green">collection.mapReduce</span>( mapFunction , reduceFunction , [optional params][, callback])</code>
++ <code><span style="color:green">collection.remove</span>(query[, callback])</code> - see callback note below
++ <code>collection.renameCollection( newName , [dropTarget] )</code> renames the collection.
++ <code>collection.runCommand( name , [options] )</code> runs a db command with the given name where the first param is the collection name
++ <code><span style="color:green">collection.save</span>(obj[, callback])</code> - see callback note below
++ <code>collection.stats()</code>
++ <code>collection.storageSize()</code> - includes free space allocated to this collection
++ <code>collection.totalIndexSize()</code> - size in bytes of all the indexes
++ <code>collection.totalSize()</code> - storage allocated for all data and indexes
++ <code><span style="color:green">collection.update</span>(query, object[, upsert\_bool, multi\_bool][, callback])</code> - see callback note below
++ <code>collection.validate()</code> - SLOW
++ <code>collection.getShardVersion()</code> - only for use with sharding
+
+### Cursors
+From http://api.mongodb.org/js/1.8.1/symbols/src/shell_query.js.html
+
++ <code><span style="color:green">cursor.sort</span>( {...} )</code>
++ <code><span style="color:green">cursor.limit</span>( n )</code>
++ <code><span style="color:green">cursor.skip</span>( n )</code>
++ <code><span style="color:green">cursor.count</span>()</code> - total # of objects matching query, ignores skip,limit
++ <code><span style="color:green">cursor.size</span>()</code> - total # of objects cursor would return, honors skip,limit
++ <code><span style="color:green">cursor.explain</span>([verbose])</code>
++ <code><span style="color:green">cursor.hint</span>(...)</code>
++ <code>cursor.showDiskLoc()</code> - adds a $diskLoc field to each returned object
++ <code><span style="color:green">cursor.toArray</span>(callback)</code> - unique to Mongolian DeadBeef
++ <code><span style="color:green">cursor.forEach</span>(func, callback)</code> - calls func for each element, and callback upon completion or error
++ <code>cursor.print()</code> - output to console in full pretty format
++ <code>cursor.map( func )</code>
++ <code>cursor.hasNext()</code>
++ <code><span style="color:green">cursor.next</span>([callback])</code> - executes `callback(null)` if there are no more elements
+
+
+### Callbacks
+Callbacks take the standard node.js format: `function(error, value)`
+
+Mongodb handles write operations (insert, update, save, drop, etc.) asynchronously. If you pass a callback into one of
+these methods, this is equivalent to immediately calling `db.lastError(callback)` on the same server/connection. Passing
+a null value will not send a getLastError command to the server.
+
+Currently there is no way to specify the write concern on these inlined callbacks.
 
 Todo
 ----
