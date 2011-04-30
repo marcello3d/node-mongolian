@@ -24,6 +24,36 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                 assert.equal(names.length,0)
             }
         },
+        "eval": {
+            topic: function (db) {
+                db.eval(function() {
+                    return 5
+                }, this.callback)
+            },
+            "returns 5": function(result) {
+                assert.equal(result,5)
+            }
+        },
+        "eval with parameter": {
+            topic: function (db) {
+                db.eval(function(x) {
+                    return x
+                }, 5, this.callback)
+            },
+            "returns 5": function(result) {
+                assert.equal(result,5)
+            }
+        },
+        "eval with two parameters": {
+            topic: function (db) {
+                db.eval(function(x,y) {
+                    return x+y
+                }, 5, 6, this.callback)
+            },
+            "returns 11": function(result) {
+                assert.equal(result,11)
+            }
+        },
         "and collection 'test'": {
             topic: function(db) {
                 return db.collection('test')
