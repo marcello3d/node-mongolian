@@ -69,14 +69,26 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                     assert.isObject(insertedRow._id)
                 },
                 "we can find it again": {
-                    topic: function(insertedRow, collection, db) {
-                        insertedRow.original = "hi mom"
+                    topic: function(insertedRow, collection) {
                         collection.findOne(this.callback)
                     },
     //                // Wish I knew a clean way to access the insertedRow from the parent scope
     //                "has same _id": function(foundRow) {
     //                    assert.equals(foundRow._id, inserted._id)
     //                },
+                    "has _id": function(foundRow) {
+                        assert.isObject(foundRow._id)
+                    },
+                    "name matches insert": function(foundRow) {
+                        assert.equal(foundRow.name, "hello world")
+                    }
+                },
+                "we can find it again by _id": {
+                    topic: function(insertedRow, collection) {
+                        collection.findOne({
+                            _id:new Mongolian.ObjectId(insertedRow._id.toString())
+                        }, this.callback)
+                    },
                     "has _id": function(foundRow) {
                         assert.isObject(foundRow._id)
                     },
