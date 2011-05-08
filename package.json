@@ -9,7 +9,8 @@
   "keywords": ["mongo", "mongodb", "database", "db", "nosql"],
   "dependencies": {
     "mongodb": ">=0.9.3",
-    "waiter": "0.1.1"
+    "waiter": "0.1.1",
+    "taxman": "0.1.0"
   },
   "devDependencies": {
     "vows": "~0.5"

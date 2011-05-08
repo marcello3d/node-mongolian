@@ -6,7 +6,7 @@ var vows = require('vows'),
 vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
     "with a clean DB (mongolian_test),": {
         topic: function () {
-            var db = new Mongolian({ keepAlive: 1 }).db('mongolian_test')
+            var db = new Mongolian('mongo://localhost/mongolian_test')
             var callback = this.callback
             db.dropDatabase(function(err) { callback(err, !err && db) })
         },

@@ -10,8 +10,8 @@ and the rest of the source!
 
 Installation
 ------------
-**WARNING! The API is super experimental, and will be adding, removing, and changing the API regularly. Use at your own
-risk**
+**DISCLAIMER: The API is experimental (but stabilizing). I will be adding, removing, and changing the API in the
+interest of a solid API. Use at your own risk**
 
 You can either clone the source and install with `npm link`, or install the latest published version from npm with
 `npm install mongolian`.
@@ -43,8 +43,7 @@ Notes:
 Basics
 ------
 Most of the work in MongolianDeadBeef doesn't occur until a query is actually made. This means that simple operations
-are fast and synchronous. Currently there is one connection per server. You can have multiple queries simultaneously on
-a single mongodb connection, so I'm not sure how important pooling is at this point.
+are fast and synchronous. Currently there is one connection per server.
 
 Examples
 --------
@@ -87,18 +86,25 @@ Examples
 Extended Examples
 -----------------
     // Create a server with a specific host/port
-    var server = new Mongolian({
-        host:"mongo.example.com",
-        port:12345
-    })
-
-    // Create a server with a 15 second connection keep-alive
-    var server = new Mongolian({ keepAlive:15000 })
+    var server = new Mongolian("mongo.example.com:12345")
 
 
     // Authenticate a database
     db.auth(username, password)
 
+
+    // Supported connection url format: [mongo://][username:password@]hostname[:port][/databasename]
+    // Use uri-encoding for special characters in the username/password/database name
+
+    // Database/auth shorthand (equivalent to calling db() and auth() on the resulting server)
+    var db = new Mongolian("mongo://username:password@mongo.example.com:12345/database")
+
+    // Connecting to replicasets:
+    var server = new Monglian(
+        "server1.local",
+        "server2.local",
+        "server3.local:27018"
+    )
 
     // GridFS
     var gridfs = db.gridfs()
@@ -229,11 +235,11 @@ From http://api.mongodb.org/js/1.8.1/symbols/src/shell_query.js.html
 + <code><strong>cursor.hint</strong>(...)</code>
 + <code>cursor.showDiskLoc()</code> - adds a $diskLoc field to each returned object
 + <code><strong>cursor.toArray</strong>(callback)</code> - unique to Mongolian DeadBeef
-+ <code><strong>cursor.forEach</strong>(func, callback)</code> - calls func for each element, and callback upon completion or error
++ <code><strong>cursor.forEach</strong>(func, callback)</code> - calls func for each document, and callback upon completion or error
 + <code>cursor.print()</code> - output to console in full pretty format
 + <code>cursor.map( func )</code>
 + <code>cursor.hasNext()</code>
-+ <code><strong>cursor.next</strong>([callback])</code> - executes `callback(null)` if there are no more elements
++ <code><strong>cursor.next</strong>([callback])</code> - returns the next document or null if there are no more
 
 
 ### Callbacks
@@ -251,7 +257,6 @@ Todo
 * Various utility methods
 * More unit tests
 * Documentation
-* Connection pooling
 * Cleanup
 
 Contributing
