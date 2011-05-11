@@ -1,12 +1,14 @@
 Mongolian DeadBeef
 ==================
-Mongolian DeadBeef is an awesome Mongo DB node.js driver that sits on top of node-mongodb-native and attempts to closely
-approximate the [mongodb shell][1].
+Mongolian DeadBeef is an awesome Mongo DB node.js driver that attempts to closely approximate the [mongodb shell][1].
 
 Introduction
 ------------
 Mongolian DeadBeef and its documentation is super under construction! Go check out [examples/mongolian_trainer.js][2]
 and the rest of the source!
+
+Mongolian DeadBeef currently depends on [node-mongodb-native][3] for low level connection BSON/message serialization,
+though this will likely change in the future.
 
 Installation
 ------------
@@ -83,8 +85,8 @@ Examples
         // handle errors/completion
     })
 
-Extended Examples
------------------
+Connections and Authentication
+------------------------------
     // Create a server with a specific host/port
     var server = new Mongolian("mongo.example.com:12345")
 
@@ -106,8 +108,40 @@ Extended Examples
         "server3.local:27018"
     )
 
-    // GridFS
-    var gridfs = db.gridfs()
+Logging
+-------
+By default, Mongolian logs to console.log, but you can override this by specifying your own log object (any object that
+provides `debug`, `info`, `warn`, and `error` methods):
+
+    new Mongolian({
+        log: {
+            debug: function(message) { ... },
+            info: function(message) { ... },
+            warn: function(message) { ... },
+            error: function(message) { ... }
+        }
+    })
+
+BSON Data Types
+---------------
+Mongolian DeadBeef currently uses [mongo-native-driver][3]'s BSON serialization code. Most BSON types map directly to
+JavaScript types, here are the ones that don't:
+
+    var Long =      require('mongolian').Long       // goog.math.Long - http://closure-library.googlecode.com/svn/docs/class_goog_math_Long.html
+    var ObjectId =  require('mongolian').ObjectId   // new ObjectId(hexString)
+    var Timestamp = require('mongolian').Timestamp  // == Long
+    var Binary =    require('mongolian').Binary     // new Binary(buffer)
+    var DBRef =     require('mongolian').DBRef      // new DBRef(namespace, objectId, dbName)
+    var Code  =     require('mongolian').Code       // new Code(fn, scope)
+
+GridFS
+------
+The Mongo shell doesn't support gridfs, so Mongolian DeadBeef provides a custom Stream-based GridFS implementation.
+It consists of two main classes, `MongolianGridFS` and `MongolianGridFile`. You can get a MongolianGridFS object from a
+database with the `gridfs([gridfs name])` function.
+
+    // Get a GridFS from a database
+    var gridfs = db.gridfs() // name defaults to 'fs'
 
     // Writing to GridFS consists of creating a GridFS file:
     var file = gridfs.create({
@@ -130,6 +164,20 @@ Extended Examples
             stream.pipe(httpResponse)
         }
     })
+
+    // You can access metadata fields from the file object:
+    file.length // might be a Long
+    file.chunkSize
+    file.md5
+    file.filename
+    file.contentType // mime-type
+    file.uploadDate
+    // These two are optional and may not be defined:
+    file.metadata
+    file.aliases
+
+    // If you make any changes, save them:
+    file.save()
 
 Mongodb Shell Command Support
 -----------------------------
@@ -265,8 +313,9 @@ Try it out and send me feedback! That's the best help I could use right now. Uni
 
 License
 -------
-Mongolian DeadBeef is open source software under the [zlib license][3].
+Mongolian DeadBeef is open source software under the [zlib license][4].
 
 [1]: http://www.mongodb.org/display/DOCS/dbshell+Reference
 [2]: https://github.com/marcello3d/node-mongolian/blob/master/examples/mongolian_trainer.js
-[3]: https://github.com/marcello3d/node-mongolian/blob/master/LICENSE
+[3]: https://github.com/christkv/node-mongodb-native
+[4]: https://github.com/marcello3d/node-mongolian/blob/master/LICENSE
