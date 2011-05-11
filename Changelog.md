@@ -2,6 +2,7 @@ Mongolian DeadBeef Changelog
 ----------------------------
 
 v0.1.9
+
 + added replicaset support (automatically finds primary and detects secondaries)
  + removed keepAlive functionality (GH-19)
 + added collection.findAndModify
