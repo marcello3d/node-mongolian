@@ -237,7 +237,7 @@ From http://api.mongodb.org/js/1.8.1/symbols/src/shell_query.js.html
 + <code><strong>cursor.toArray</strong>(callback)</code> - unique to Mongolian DeadBeef
 + <code><strong>cursor.forEach</strong>(func, callback)</code> - calls func for each document, and callback upon completion or error
 + <code>cursor.print()</code> - output to console in full pretty format
-+ <code>cursor.map( func )</code>
++ <code><strong>cursor.map</strong>( func )</code> - map documents before they're returned in next,toArray,forEach
 + <code>cursor.hasNext()</code>
 + <code><strong>cursor.next</strong>([callback])</code> - returns the next document or null if there are no more
 
