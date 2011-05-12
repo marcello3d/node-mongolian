@@ -228,7 +228,7 @@ From http://api.mongodb.org/js/1.8.1/symbols/src/shell_db.js.html
 + <code><strong>db.removeUser</strong>(username[, callback])</code> - see callback note below
 + <code>db.repairDatabase()</code>
 + <code>db.resetError()</code>
-+ <code><strong>db.runCommand</strong>(cmdObj[, callback])</code> run a database command. <strike>if cmdObj is a string, turns it into { cmdObj : 1 }</strike>
++ <code><strong>db.runCommand</strong>(cmdObj[, callback])</code> run a database command. if cmdObj is a string, turns it into { cmdObj : 1 }
 + <code>db.serverStatus()</code>
 + <code>db.setProfilingLevel(level,<slowms>)</code> 0=off 1=slow 2=all
 + <code>db.shutdownServer()</code>
@@ -261,7 +261,7 @@ From http://api.mongodb.org/js/1.8.1/symbols/src/shell_collection.js.html
 + <code><strong>collection.mapReduce</strong>( mapFunction , reduceFunction , [optional params][, callback])</code>
 + <code><strong>collection.remove</strong>(query[, callback])</code> - see callback note below
 + <code>collection.renameCollection( newName , [dropTarget] )</code> renames the collection.
-+ <code>collection.runCommand( name , [options] )</code> runs a db command with the given name where the first param is the collection name
++ <code><strong>collection.runCommand</strong>( name , [options][, callback])</code> runs a db command with the given name where the first param is the collection name
 + <code><strong>collection.save</strong>(obj[, callback])</code> - see callback note below
 + <code>collection.stats()</code>
 + <code>collection.storageSize()</code> - includes free space allocated to this collection
@@ -285,7 +285,7 @@ From http://api.mongodb.org/js/1.8.1/symbols/src/shell_query.js.html
 + <code><strong>cursor.toArray</strong>(callback)</code> - unique to Mongolian DeadBeef
 + <code><strong>cursor.forEach</strong>(func, callback)</code> - calls func for each document, and callback upon completion or error
 + <code>cursor.print()</code> - output to console in full pretty format
-+ <code><strong>cursor.map</strong>( func )</code> - map documents before they're returned in next,toArray,forEach
++ <code><strong>cursor.map</strong>( func )</code> - map documents before they're returned in next, toArray, forEach
 + <code>cursor.hasNext()</code>
 + <code><strong>cursor.next</strong>([callback])</code> - returns the next document or null if there are no more
 
