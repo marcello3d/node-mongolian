@@ -255,6 +255,10 @@ From http://api.mongodb.org/js/1.8.1/symbols/src/shell_collection.js.html
 + <code><strong>collection.find(...).sort</strong>(...)</code>
 + <code><strong>collection.findOne</strong>([query][callback])</code>
 + <code><strong>collection.findAndModify</strong>( { update : ... , remove : bool [, query: {}, sort: {}, 'new': false] } )</code>
+  ex: finds document with comment value 0, increase its 'count' field by 1, and return the updated document.
+  <code>collection.findAndModify( {query: {comment:'0'}, update : {"$inc":{"count":1}}, 'new': true}, function (err, doc) {
+  console.log(doc)
+})</code>
 + <code><strong><em>collection.getDB</em></strong>()</code> get DB object associated with collection implemented as <code><strong>collection.db</strong></code>
 + <code><strong><em>collection.getIndexes</em></strong>()</code> implemented as <code><strong>collection.indexes</strong>(callback)</code>
 + <code>collection.group( { key : ..., initial: ..., reduce : ...[, cond: ...] } )</code>
