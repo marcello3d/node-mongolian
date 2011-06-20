@@ -442,7 +442,7 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                                         stream.on('error',this.callback)
                                         stream.on('end',function() { callback(null,text) })
                                     },
-                                    "text is 'Hello World!'": function(text) {
+                                    "text is 'Adios, space cowboy!'": function(text) {
                                         assert.equal(text, 'Adios, space cowboy!')
                                     }
                                 }
