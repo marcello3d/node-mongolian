@@ -106,6 +106,30 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                     "should contain 'system.indexes'": function(names) {
                         assert.include(names,"system.indexes")
                     }
+                },
+                "and update({name:'hello world'}, {age:45})": {
+                    topic: function(insertedRow, collection, db) {
+                        collection.update({name:'hello world'}, {age:45}, this.callback)
+                    },
+                    "we can find it": {
+                        topic: function(insertedRow, collection) {
+                            collection.findOne(this.callback)
+                        },
+                        "has age": function(foundRow) {
+                            assert.equal(foundRow.age, 45)
+                        },
+                        "no longer has name": function(foundRow) {
+                            assert.isUndefined(foundRow.name)
+                        }
+                    }
+                },
+                "and updateAll({name:'hello world'}, {age:45})": {
+                    topic: function(insertedRow, collection, db) {
+                        collection.updateAll({}, {age:45}, this.callback)
+                    },
+                    "fails with 'multi update only works with $ operators'": function(error, result) {
+                        assert.equal(error.message, "Server Error: multi update only works with $ operators")
+                    }
                 }
             }
         },
