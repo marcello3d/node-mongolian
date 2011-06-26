@@ -1,6 +1,18 @@
 Mongolian DeadBeef Changelog
 ----------------------------
 
+v0.1.10
+
++ added collection.runCommand
++ renamed db.queryCommand -> db.runCommand, matching mongo shell syntax
++ gridfs tweaks
++ fixed collection._indexCache creation (bug caught by dvv) and improved ensureIndex return value consistency
++ GH-21 - collection.drop() and db.dropDatabase() not checking if callback is valid
++ GH-22 - EventEmitter error
++ GH-15/GH-29 - more robust error catching!
++ GH-24 - temporary workaround for (mongodb 0.9.4-4 ~ 0.9.6.1) incompatibility
++ more tests
+
 v0.1.9
 
 + added replicaset support (automatically finds primary and detects secondaries)
