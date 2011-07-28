@@ -106,7 +106,7 @@ Connections and Authentication
         "server1.local",
         "server2.local",
         "server3.local:27018"
-    )
+    )	
 
 Logging
 -------
@@ -133,6 +133,50 @@ JavaScript types, here are the ones that don't:
     var Binary =    require('mongolian').Binary     // new Binary(buffer)
     var DBRef =     require('mongolian').DBRef      // new DBRef(namespace, objectId, dbName)
     var Code  =     require('mongolian').Code       // new Code(fn, scope)
+
+DBRefs
+------
+    http://www.mongodb.org/display/DOCS/Database+References -> Javascript (mongo shell)
+
+    var Mongolian = require ('mongolian');
+
+    var server = new Mongolian();
+
+    var db    = server.db('UserManager');
+    var users = db.collection('users');
+    var roles = db.collection('roles');
+
+    var rolesInsert = {
+        roleName:   'admin',
+        canCreate:  'true',
+        canEdit:    'true',
+        canView:    'true',
+        canDelete:  'true'
+    };
+
+    roles.insert(rolesInsert, function (err, role) {
+
+        var userInsert = {
+            username: 'jarrad@jarradseers.com',
+            password: '123',
+            roles: []
+        };
+
+        userInsert.roles.push(new Mongolian.DBRef('roles', role._id, 'UserManager'));
+        users.insert(userInsert, function() {
+
+            users.findOne({username: 'jarradseers'}, function(err, user) {
+
+              // Grab the first role via DBRef
+              user.roles[0].fetch(function(err, role) {
+                  console.log(role);
+              });
+
+            });
+
+          });
+    });
+
 
 GridFS
 ------
