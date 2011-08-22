@@ -411,12 +411,19 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                 "it succeeds": function(err,insertedRows) {
                     assert.equal(err, null)
                 },
+                "and distinct on colors": {
+                    topic: function(insertedRows, collection, db) {
+                        collection.distinct("color", this.callback);
+                    },
+                    "is [yellow, white, red, green]": function(err, values) {
+                        assert.deepEqual(values, ['yellow', 'white', 'red', 'green'])
+                    }
+                },
                 "and distinct on color for i < 4": {
                     topic: function(insertedRows, collection, db) {
                         collection.distinct("color", {i: { $lt: 4 }}, this.callback);
                     },
                     "is [yellow, white, red] (no double red, no green)": function(err, values) {
-                        console.log(arguments);
                         assert.deepEqual(values, ['yellow', 'white', 'red'])
                     }
                 }
