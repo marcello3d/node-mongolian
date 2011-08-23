@@ -383,6 +383,52 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                 }
             }
         },
+        "and collection 'test5'": {
+            topic: function(db) {
+                return db.collection('test5')
+            },
+            "with several inserted documents,": {
+                topic: function (collection, db) {
+                    var array = [{
+                          i: 0,
+                          color: 'yellow' 
+                        },{
+                          i:1,
+                          color: 'white'
+                        },{
+                          i:2,
+                          color: 'red'
+                        },{
+                          i:3,
+                          color: 'red'
+                        },{
+                          i:4,
+                          color: 'green'
+                        }]
+                    
+                    collection.insert(array, this.callback)
+                },
+                "it succeeds": function(err,insertedRows) {
+                    assert.equal(err, null)
+                },
+                "and distinct on colors": {
+                    topic: function(insertedRows, collection, db) {
+                        collection.distinct("color", this.callback);
+                    },
+                    "is [yellow, white, red, green]": function(err, values) {
+                        assert.deepEqual(values, ['yellow', 'white', 'red', 'green'])
+                    }
+                },
+                "and distinct on color for i < 4": {
+                    topic: function(insertedRows, collection, db) {
+                        collection.distinct("color", {i: { $lt: 4 }}, this.callback);
+                    },
+                    "is [yellow, white, red] (no double red, no green)": function(err, values) {
+                        assert.deepEqual(values, ['yellow', 'white', 'red'])
+                    }
+                }
+            }
+        },
         "and gridfs 'testfs',": {
             topic: function(db) {
                 return db.gridfs('testfs')
