@@ -64,7 +64,7 @@ Examples
 
     // Insert some data
     posts.insert({
-        pageId: "hallo"
+        pageId: "hallo",
         title: "Hallo",
         created: new Date,
         body: "Welcome to my new blog!"
