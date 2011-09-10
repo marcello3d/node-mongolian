@@ -131,6 +131,47 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                         assert.equal(error.message, "Server Error: multi update only works with $ operators")
                     }
                 }
+            },
+            "and 'saving' into 'test',": {
+                topic: function (collection,db) {
+                    collection.save({ name:'hello there' }, this.callback)
+                },
+                "it succeeds": function(insertedRow) {
+                    assert.equal(insertedRow.name, "hello there")
+                },
+                "has _id": function(insertedRow) {
+                    assert.isObject(insertedRow._id)
+                },
+                "we can save again, ": {
+                    topic: function(insertedRow, collection) {
+                        insertedRow.name = "awesome sauce"
+                        collection.save(insertedRow, this.callback)
+                    },
+                    "has _id": function(insertedRow) {
+                        assert.isObject(insertedRow._id)
+                    },
+                    "name matches insert": function(insertedRow) {
+                        assert.equal(insertedRow.name, "awesome sauce")
+                    },
+                    "we can find it": {
+                        topic: function(insertedRow, insertedRow2, collection) {
+                            collection.findOne({_id:insertedRow._id}, this.callback)
+                        },
+                        "has new name": function(foundRow) {
+                            assert.equal(foundRow.name, "awesome sauce")
+                        },
+                        "we can save it without a callback": {
+                            topic: function(foundRow, insertedRow, insertedRow2, collection) {
+                                foundRow.name = "awesome hot sauce"
+                                collection.save(foundRow)
+                                this.callback(null,foundRow)
+                            },
+                            "has new name": function(insertedRow) {
+                                assert.equal(insertedRow.name, "awesome hot sauce")
+                            }
+                        }
+                    }
+                }
             }
         },
         "and collection 'test2'": {
