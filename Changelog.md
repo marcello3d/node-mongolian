@@ -1,15 +1,19 @@
 Mongolian DeadBeef Changelog
 ----------------------------
 
+v0.1.12
+
++ GH-53 - regression if save has no callback
+
 v0.1.11
 
-+ GH-24 Remove hack for mongodb-native bug
-+ GH-31: Save callback gets no data
-+ GH-34 updated taxman dependency
-+ GH-37 mapReduce wasn't converting optional finalize function to bson.Code instance
-+ GH-41 Add collection.distinct (Filirom1)
-+ GH-51 support for mongodb://-style url (mschuetz)
-+ GH-52 migrated from x instanceof Function to typeof x === 'function'
++ GH-24 - Remove hack for mongodb-native bug
++ GH-31 - Save callback gets no data
++ GH-34 - updated taxman dependency
++ GH-37 - mapReduce wasn't converting optional finalize function to bson.Code instance
++ GH-41 - Add collection.distinct (Filirom1)
++ GH-51 - support for mongodb://-style url (mschuetz)
++ GH-52 - migrated from x instanceof Function to typeof x === 'function'
 + logging/error tweaks
 + documentation tweaks
 + removed broken/unsupported server.closeWhenDone method
