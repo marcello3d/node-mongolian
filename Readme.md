@@ -113,13 +113,17 @@ Logging
 By default, Mongolian logs to console.log, but you can override this by specifying your own log object (any object that
 provides `debug`, `info`, `warn`, and `error` methods):
 
-    new Mongolian({
+    var server = new Mongolian({
         log: {
             debug: function(message) { ... },
             info: function(message) { ... },
             warn: function(message) { ... },
             error: function(message) { ... }
         }
+    })
+
+    var server = new Mongolian('server1.local', 'server2.local', {
+        log: { ... }
     })
 
 BSON Data Types
