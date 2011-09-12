@@ -241,7 +241,7 @@ From http://api.mongodb.org/js/1.8.1/symbols/src/shell_collection.js.html
 + <code>collection.find().help()</code> - show DBCursor help
 + <code><strong>collection.count</strong>(callback)</code>
 + <code>collection.dataSize()</code>
-+ <code>collection.distinct( key )</code> - eg. collection.distinct( 'x' )</code>
++ <code><strong>collection.distinct</strong>(key[, query], callback)</code> - eg. collection.distinct( 'x' )</code>
 + <code><strong>collection.drop</strong>([callback])</code> drop the collection - see callback note below
 + <code><strong>collection.dropIndex</strong>(name[, callback])</code> - see callback note below
 + <code>collection.dropIndexes()</code>
