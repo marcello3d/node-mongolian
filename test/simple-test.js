@@ -432,7 +432,7 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                 topic: function (collection, db) {
                     var array = [{
                           i: 0,
-                          color: 'yellow' 
+                          color: 'yellow'
                         },{
                           i:1,
                           color: 'white'
@@ -446,7 +446,7 @@ vows.describe('Mongolian DeadBeef, I choose you!').addBatch({
                           i:4,
                           color: 'green'
                         }]
-                    
+
                     collection.insert(array, this.callback)
                 },
                 "it succeeds": function(err,insertedRows) {
