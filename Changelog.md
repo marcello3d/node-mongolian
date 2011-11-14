@@ -2,6 +2,7 @@ Mongolian DeadBeef Changelog
 ----------------------------
 
 v0.1.13
+
 + GH-46 - Rewrote cursor.forEach to use nextBatch instead of next, fixes stack overflow
 + GH-60 - upgrade to new mongodb@0.9.7 socket connection code
 + new test framework (using nodeunit instead of vowsjs)
