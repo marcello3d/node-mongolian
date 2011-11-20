@@ -2,6 +2,8 @@ Mongolian DeadBeef
 ==================
 Mongolian DeadBeef is an awesome Mongo DB node.js driver that attempts to closely approximate the [mongodb shell][1].
 
+[![Build Status](https://secure.travis-ci.org/marcello3d/node-mongolian.png)](http://travis-ci.org/marcello3d/node-mongolian)
+
 Introduction
 ------------
 Mongolian DeadBeef and its documentation is super under construction! Go check out [examples/mongolian_trainer.js][2]
