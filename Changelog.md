@@ -1,6 +1,13 @@
 Mongolian DeadBeef Changelog
 ----------------------------
 
+v0.1.14
+
++ GH-28 - tweak for mongos support from yosefd (I haven't personally tested a sharded setup yet)
++ GH-61 - getLastError -> getlasterror compatibility fix
++ GH-63 GH-64 GH-65 - update to latest mongodb-native socket handling code (thanks to xcoderzach)
++ peg mongodb@0.9.7-2-2 to avoid untested version conflicts
+
 v0.1.13
 
 + GH-46 - Rewrote cursor.forEach to use nextBatch instead of next, fixes stack overflow
