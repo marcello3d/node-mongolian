@@ -8,12 +8,12 @@
   "main": "mongolian.js",
   "keywords": ["mongo", "mongodb", "database", "db", "nosql"],
   "dependencies": {
-    "mongodb": "0.9.7-2-2",
+    "mongodb": "0.9.7-2-3",
     "waiter": "0.1.1",
     "taxman": "0.1.1"
   },
   "devDependencies": {
-    "nodeunit": ">=0.6.2"
+    "nodeunit": "0.6.4"
   },
   "scripts": {
     "test": "node_modules/.bin/nodeunit test"

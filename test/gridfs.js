@@ -1,5 +1,8 @@
-var Mongolian = require('../mongolian.js')
-var db,gridfs
+/* Mongolian DeadBeef by Marcello Bastea-Forte - zlib license */
+
+var Mongolian = require('../mongolian')
+
+var db,collection
 
 module.exports = {
     "create connection": function(test) {

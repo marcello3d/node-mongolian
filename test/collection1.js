@@ -1,4 +1,6 @@
-var Mongolian = require('../mongolian.js')
+/* Mongolian DeadBeef by Marcello Bastea-Forte - zlib license */
+
+var Mongolian = require('../mongolian')
 
 var db,collection
 
@@ -20,14 +22,14 @@ module.exports = {
 
             collection.findOne(function(error, foundRow) {
                 test.ifError(error)
-                test.deepEqual(foundRow._id, insertedRow._id)
+                test.equal(foundRow._id.toString(), insertedRow._id.toString())
                 test.equal(foundRow.name, "hello world")
 
                 collection.findOne({
                     _id:new Mongolian.ObjectId(insertedRow._id.toString())
                 }, function(error, foundRow) {
                     test.ifError(error)
-                    test.deepEqual(foundRow._id, insertedRow._id)
+                    test.equal(foundRow._id.toString(), insertedRow._id.toString())
                     test.equal(foundRow.name, "hello world")
 
                     test.done()
@@ -43,7 +45,7 @@ module.exports = {
                 _id:new Mongolian.ObjectId(insertedRow._id.toString())
             }, function(error, foundRow) {
                 test.ifError(error)
-                test.deepEqual(foundRow._id, insertedRow._id)
+                test.equal(foundRow._id.toString(), insertedRow._id.toString())
                 test.equal(foundRow.name, "hello world")
 
                 test.done()
