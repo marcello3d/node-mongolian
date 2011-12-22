@@ -9,8 +9,8 @@ Introduction
 Mongolian DeadBeef and its documentation is super under construction! Go check out [examples/mongolian_trainer.js][2]
 and the rest of the source!
 
-Mongolian DeadBeef currently depends on [node-mongodb-native][3] for low level connection BSON/message serialization,
-though this will likely change in the future.
+Unlike other MongoDB node.js drivers, Mongolian DeadBeef is built from the ground up for node.js, using
+[node-buffalo][3] for BSON/message serialization.
 
 Installation
 ------------
@@ -130,15 +130,13 @@ provides `debug`, `info`, `warn`, and `error` methods):
 
 BSON Data Types
 ---------------
-Mongolian DeadBeef currently uses [mongo-native-driver][3]'s BSON serialization code. Most BSON types map directly to
-JavaScript types, here are the ones that don't:
+Mongolian DeadBeef uses [node-buffalo][3]'s BSON serialization code. Most BSON types map directly to JavaScript types,
+here are the ones that don't:
 
     var Long =      require('mongolian').Long       // goog.math.Long - http://closure-library.googlecode.com/svn/docs/class_goog_math_Long.html
-    var ObjectId =  require('mongolian').ObjectId   // new ObjectId(hexString)
+    var ObjectId =  require('mongolian').ObjectId   // new ObjectId(byteBuffer or hexString)
     var Timestamp = require('mongolian').Timestamp  // == Long
-    var Binary =    require('mongolian').Binary     // new Binary(buffer)
-    var DBRef =     require('mongolian').DBRef      // new DBRef(namespace, objectId, dbName)
-    var Code  =     require('mongolian').Code       // new Code(fn, scope)
+    var DBRef =     require('mongolian').DBRef      // not supported yet
 
 GridFS
 ------
@@ -312,6 +310,7 @@ Currently there is no way to specify the write concern on these inlined callback
 Todo
 ----
 
+* Connection pooling
 * Various utility methods
 * More unit tests
 * Documentation
@@ -327,5 +326,5 @@ Mongolian DeadBeef is open source software under the [zlib license][4].
 
 [1]: http://www.mongodb.org/display/DOCS/dbshell+Reference
 [2]: https://github.com/marcello3d/node-mongolian/blob/master/examples/mongolian_trainer.js
-[3]: https://github.com/christkv/node-mongodb-native
+[3]: https://github.com/marcello3d/node-buffalo
 [4]: https://github.com/marcello3d/node-mongolian/blob/master/LICENSE
