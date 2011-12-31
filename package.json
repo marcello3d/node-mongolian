@@ -1,7 +1,7 @@
 {
   "name": "mongolian",
   "description": "Mongolian DeadBeef is an awesome Mongo DB node.js driver",
-  "version": "0.1.15-buffalo-pre",
+  "version": "0.1.15-pre",
   "homepage": "https://github.com/marcello3d/node-mongolian",
   "repository": "git://github.com/marcello3d/node-mongolian.git",
   "author": "Marcello Bastéa-Forte <marcello@cellosoft.com> (http://marcello.cellosoft.com/)",

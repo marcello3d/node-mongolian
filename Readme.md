@@ -12,6 +12,15 @@ and the rest of the source!
 Unlike other MongoDB node.js drivers, Mongolian DeadBeef is built from the ground up for node.js, using
 [node-buffalo][3] for BSON/message serialization.
 
+v0.1.15 Upgrade notes
+---------------------
+0.1.15 uses [node-buffalo][3] instead of mongodb-native for serialization, this means a few incompatibilities:
+
++ The helper methods on `ObjectId` are removed, use the `ObjectId` constructor to parse hex strings
++ `Code` type is removed, use vanilla function instances instead
++ `DBRef` is not supported
++ Error messages may be different
+
 Installation
 ------------
 **DISCLAIMER: The API is experimental (but stabilizing). I will be adding, removing, and changing the API in the
