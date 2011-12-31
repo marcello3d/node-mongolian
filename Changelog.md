@@ -1,6 +1,12 @@
 Mongolian DeadBeef Changelog
 ----------------------------
 
+v0.1.15
+
++ removed mongodb-native dependency, now using node-buffalo (https://github.com/marcello3d/node-buffalo)
++ GH-69 - exceptions in user callbacks should now bubble up correctly
++ GH-59 - fixes ensureIndex throws error about key name
+
 v0.1.14
 
 + GH-28 - tweak for mongos support from yosefd (I haven't personally tested a sharded setup yet)
