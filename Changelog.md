@@ -1,6 +1,10 @@
 Mongolian DeadBeef Changelog
 ----------------------------
 
+v0.1.16
+
++ GH-72 - fixes Buffer is not large enough exception
+
 v0.1.15
 
 + removed mongodb-native dependency, now using node-buffalo (https://github.com/marcello3d/node-buffalo)
