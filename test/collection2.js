@@ -85,6 +85,14 @@ module.exports = {
             test.done()
         })
     },
+    "query failure": function(test) {
+        collection.find([undefined]).toArray(function(error, array) {
+            test.ok(error)
+            test.equal(array, undefined)
+            test.equal(error.message, "Query failure: can't have undefined in a query expression")
+            test.done()
+        })
+    },
 
     "close connection": function(test) {
         db.server.close()
