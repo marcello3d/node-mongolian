@@ -8,7 +8,7 @@
   "main": "mongolian.js",
   "keywords": ["mongo", "mongodb", "database", "db", "nosql"],
   "dependencies": {
-    "buffalo": "0.1.2",
+    "buffalo": "0.1.3",
     "waiter": "0.1.1",
     "taxman": "0.1.1"
   },

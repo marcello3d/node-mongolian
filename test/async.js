@@ -51,6 +51,40 @@ module.exports = {
         })
     },
 
+    "insert 1000 documents and async read": function(test) {
+        var array = []
+        var idMap = {}
+        var data = ''
+        for (var i=0; i<1000; i++) {
+            var id = new Mongolian.ObjectId
+            array.push({
+                _id:id,
+                i:i,
+                name:'async',
+                data:data+='X'
+            })
+            idMap[id.toString()] = true
+        }
+        collection.insert(array, function(error,insertedRows) {
+            test.ifError(error)
+            test.equal(insertedRows.length, 1000)
+            collection.find({name:'async'}).toArray(function(error, array) {
+                test.ifError(error)
+                test.equal(array.length, 1000)
+                var validIds = 0
+                array.forEach(function(item) {
+                    var idString = item._id.toString()
+                    // Check that this is an id we inserted
+                    if (idMap[idString]) validIds++
+                    // Remove it from our map so we can catch duplicates
+                    delete idMap[idString]
+                })
+                test.equal(validIds, 1000)
+                test.done()
+            })
+        })
+    },
+
     "close connection": function(test) {
         db.server.close()
         test.done()
