@@ -1,6 +1,15 @@
 Mongolian DeadBeef Changelog
 ----------------------------
 
+v0.1.17
+
++ major bugfix release
++ GH-77,GH-86 fixed authentication regression from 0.1.15
++ GH-82 unit tests
++ GH-83 avoid buffer reuse bug with updated buffalo
++ GH-84 pass number of updated/deleted rows to update() and remove() methods
++ GH-87 catch Query Failure and Cursor Not Found errors and return them as errors
+
 v0.1.16
 
 + GH-72 - fixes Buffer is not large enough exception
