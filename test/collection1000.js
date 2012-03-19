@@ -52,6 +52,18 @@ module.exports = {
             test.done()
         })
     },
+    "mapped forEach": function(test) {
+        var counter = 0
+        collection.find().map(function(item) {
+            return item.i
+        }).forEach(function(item) {
+            counter += item
+        }, function(error) {
+            test.ifError(error)
+            test.equal(counter, 499500)
+            test.done()
+        })
+    },
     "sort({i:-1}).count": function(test) {
         collection.find().sort({i:-1}).count(function(error, count) {
             test.ifError(error)
