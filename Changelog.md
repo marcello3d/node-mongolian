@@ -1,6 +1,11 @@
 Mongolian DeadBeef Changelog
 ----------------------------
 
+v0.1.18
+
++ GH-90 gridfs now allows multiple files with the same name
++ GH-96 cursor.forEach ignores cursor.map()
+
 v0.1.17
 
 + major bugfix release
