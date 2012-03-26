@@ -6,54 +6,61 @@ var db,collection
 
 function testRandomFile(numberOfBytes, writeChunkSize, chunkSize) {
     return function (test) {
-        // Generate random buffer
-        var fileBuffer = new Buffer(numberOfBytes)
-        for (var i=0; i<numberOfBytes; i++) {
-            fileBuffer[i] = i & 0xFF
-        }
-        // Create grid file
-        var gridFile = gridfs.create('random')
-        if (chunkSize) {
-            gridFile.chunkSize = chunkSize
-        }
-        // Get write stream and write out buffer
-        var writeStream = gridFile.writeStream()
-        writeStream.once('error',function(error) {
+        // Delete any previous file
+        gridfs.findOne('random',function(error,oldFile) {
             test.ifError(error)
-        })
-        // After the stream finishes...
-        writeStream.once('close',function() {
-            test.ok(!writeStream.writable)
-            // Find the file again
-            gridfs.findOne('random', function(error, file) {
+            if (oldFile) oldFile.remove()
+
+            // Generate random buffer
+            var fileBuffer = new Buffer(numberOfBytes)
+            for (var i=0; i<numberOfBytes; i++) {
+                fileBuffer[i] = i & 0xFF
+            }
+
+            // Create grid file
+            var gridFile = gridfs.create('random')
+            if (chunkSize) {
+                gridFile.chunkSize = chunkSize
+            }
+            // Get write stream and write out buffer
+            var writeStream = gridFile.writeStream()
+            writeStream.once('error',function(error) {
                 test.ifError(error)
-                test.ok(file)
-
-                // Read it in again
-                var readStream = file.readStream()
-                test.ok(readStream)
-                var bytesRead = 0
-
-                // Check the bytes match
-                readStream.on('data',function(chunk) {
-                    test.equal(chunk.toString(),
-                               fileBuffer.slice(bytesRead,bytesRead+=chunk.length).toString())
-                })
-                readStream.on('error', function(error) {
+            })
+            // After the stream finishes...
+            writeStream.once('close',function() {
+                test.ok(!writeStream.writable)
+                // Find the file again
+                gridfs.findOne('random', function(error, file) {
                     test.ifError(error)
-                })
-                readStream.on('end',function() {
-                    test.equal(bytesRead, numberOfBytes)
-                    test.done()
+                    test.ok(file)
+
+                    // Read it in again
+                    var readStream = file.readStream()
+                    test.ok(readStream)
+                    var bytesRead = 0
+
+                    // Check the bytes match
+                    readStream.on('data',function(chunk) {
+                        test.equal(chunk.toString(),
+                            fileBuffer.slice(bytesRead,bytesRead+=chunk.length).toString())
+                    })
+                    readStream.on('error', function(error) {
+                        test.ifError(error)
+                    })
+                    readStream.on('end',function() {
+                        test.equal(bytesRead, numberOfBytes)
+                        test.done()
+                    })
                 })
             })
-        })
 
-        // Write out the buffer to the stream using the write chunk size specified
-        for (var i=0; i<numberOfBytes; i+=writeChunkSize) {
-            writeStream.write(fileBuffer.slice(i,i+writeChunkSize))
-        }
-        writeStream.end()
+            // Write out the buffer to the stream using the write chunk size specified
+            for (var i=0; i<numberOfBytes; i+=writeChunkSize) {
+                writeStream.write(fileBuffer.slice(i,i+writeChunkSize))
+            }
+            writeStream.end()
+        })
     }
 }
 
@@ -126,7 +133,30 @@ module.exports = {
         stream.end("Adios, space cowboy!")
     },
 
-    "check file count is still 1": function(test) {
+    "check file count is now 2": function(test) {
+        gridfs.find().count(function(error, count) {
+            test.ifError(error)
+            test.equal(count, 2)
+            test.done()
+        })
+    },
+
+    "remove first file": function(test) {
+        gridfs.findOne({
+            filename:'foo',
+            length:12
+        }, function(error, file) {
+            test.ifError(error)
+            test.ok(file)
+            test.equal(file.length, 12)
+            file.remove(function(error) {
+                test.ifError(error)
+                test.done()
+            })
+        })
+    },
+
+    "check file count is 1 again": function(test) {
         gridfs.find().count(function(error, count) {
             test.ifError(error)
             test.equal(count, 1)
