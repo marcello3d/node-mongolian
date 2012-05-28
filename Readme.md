@@ -274,7 +274,7 @@ From http://api.mongodb.org/js/1.8.1/symbols/src/shell_collection.js.html
 })</code>
 + <code><strong><em>collection.getDB</em></strong>()</code> get DB object associated with collection implemented as <code><strong>collection.db</strong></code>
 + <code><strong><em>collection.getIndexes</em></strong>()</code> implemented as <code><strong>collection.indexes</strong>(callback)</code>
-+ <code>collection.group( { key : ..., initial: ..., reduce : ...[, cond: ...] } )</code>
++ <code><strong>collection.group</strong>( { key : ..., initial: ..., reduce : ...[, cond: ...] } )</code>
 + <code><strong>collection.mapReduce</strong>( mapFunction , reduceFunction , [optional params][, callback])</code>
 + <code><strong>collection.remove</strong>(query[, callback])</code> - see callback note below
 + <code>collection.renameCollection( newName , [dropTarget] )</code> renames the collection.
