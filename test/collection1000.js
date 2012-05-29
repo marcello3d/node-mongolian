@@ -52,6 +52,25 @@ module.exports = {
             test.done()
         })
     },
+    "group check": function (test) {
+        collection.group({
+            'ns': 'test_1000',
+            'key':'even',
+            'initial': {evenCount:0, oddCount: 0, total:0},
+            '$reduce': function (doc, out) {
+                ++out[doc.even ? 'evenCount' : 'oddCount'];
+                ++out.total;
+            },
+            finalize: function (out) {}
+        }, function (error,group) {
+            var ret = group.retval[0];
+            test.ifError(error);
+            test.equal(ret.total, 1000);
+            test.equal(ret.evenCount, 500);
+            test.equal(ret.oddCount,500);
+            test.done();
+        });
+    },
     "mapped forEach": function(test) {
         var counter = 0
         collection.find().map(function(item) {
