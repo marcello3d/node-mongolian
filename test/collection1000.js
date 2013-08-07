@@ -36,7 +36,7 @@ module.exports = {
         })
     },
     "size": function(test) {
-        collection.find().size(function(error, count) {
+        collection.find().skip(0).size(function(error, count) {
             test.ifError(error)
             test.equal(count, 1000)
             test.done()
