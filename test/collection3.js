@@ -13,7 +13,7 @@ module.exports = {
         })
     },
 
-    "isCapped()": function(test) {
+    "check isCapped": function(test) {
         db.eval(
             function() {
                 return db.createCollection("test3", { capped:true, size:10 })
