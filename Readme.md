@@ -60,138 +60,139 @@ are fast and synchronous. Currently there is one connection per server.
 
 Examples
 --------
+```javascript
+var Mongolian = require("mongolian")
 
-    var Mongolian = require("mongolian")
+// Create a server instance with default host and port
+var server = new Mongolian
 
-    // Create a server instance with default host and port
-    var server = new Mongolian
+// Get database
+var db = server.db("awesome_blog")
 
-    // Get database
-    var db = server.db("awesome_blog")
+// Get some collections
+var posts = db.collection("posts")
+var comments = db.collection("comments")
 
-    // Get some collections
-    var posts = db.collection("posts")
-    var comments = db.collection("comments")
+// Insert some data
+posts.insert({
+    pageId: "hallo",
+    title: "Hallo",
+    created: new Date,
+    body: "Welcome to my new blog!"
+})
 
-    // Insert some data
-    posts.insert({
-        pageId: "hallo",
-        title: "Hallo",
-        created: new Date,
-        body: "Welcome to my new blog!"
-    })
+// Get a single document
+posts.findOne({ pageId: "hallo" }, function(err, post) {
+    ...
+})
 
-    // Get a single document
-    posts.findOne({ pageId: "hallo" }, function(err, post) {
-        ...
-    })
-
-    // Document cursors
-    posts.find().limit(5).sort({ created: 1 }).toArray(function (err, array) {
-        // do something with the array
-    })
-    posts.find({ title: /^hal/ }).forEach(function (post) {
-        // do something with a single post
-    }, function(err) {
-        // handle errors/completion
-    })
-
+// Document cursors
+posts.find().limit(5).sort({ created: 1 }).toArray(function (err, array) {
+    // do something with the array
+})
+posts.find({ title: /^hal/ }).forEach(function (post) {
+    // do something with a single post
+}, function(err) {
+    // handle errors/completion
+})
+```
 Connections and Authentication
 ------------------------------
-    // Create a server with a specific host/port
-    var server = new Mongolian("mongo.example.com:12345")
+```javascript
+// Create a server with a specific host/port
+var server = new Mongolian("mongo.example.com:12345")
 
 
-    // Authenticate a database
-    db.auth(username, password)
+// Authenticate a database
+db.auth(username, password)
 
 
-    // Supported connection url format: [mongo://][username:password@]hostname[:port][/databasename]
-    // Use uri-encoding for special characters in the username/password/database name
+// Supported connection url format: [mongo://][username:password@]hostname[:port][/databasename]
+// Use uri-encoding for special characters in the username/password/database name
 
-    // Database/auth shorthand (equivalent to calling db() and auth() on the resulting server)
-    var db = new Mongolian("mongo://username:password@mongo.example.com:12345/database")
+// Database/auth shorthand (equivalent to calling db() and auth() on the resulting server)
+var db = new Mongolian("mongo://username:password@mongo.example.com:12345/database")
 
-    // Connecting to replicasets:
-    var server = new Monglian(
-        "server1.local",
-        "server2.local",
-        "server3.local:27018"
-    )
-
+// Connecting to replicasets:
+var server = new Monglian(
+    "server1.local",
+    "server2.local",
+    "server3.local:27018"
+)
+```
 Logging
 -------
 By default, Mongolian logs to console.log, but you can override this by specifying your own log object (any object that
 provides `debug`, `info`, `warn`, and `error` methods):
+```javascript
+var server = new Mongolian({
+    log: {
+        debug: function(message) { ... },
+        info: function(message) { ... },
+        warn: function(message) { ... },
+        error: function(message) { ... }
+    }
+})
 
-    var server = new Mongolian({
-        log: {
-            debug: function(message) { ... },
-            info: function(message) { ... },
-            warn: function(message) { ... },
-            error: function(message) { ... }
-        }
-    })
-
-    var server = new Mongolian('server1.local', 'server2.local', {
-        log: { ... }
-    })
-
+var server = new Mongolian('server1.local', 'server2.local', {
+    log: { ... }
+})
+```
 BSON Data Types
 ---------------
 Mongolian DeadBeef uses [node-buffalo][3]'s BSON serialization code. Most BSON types map directly to JavaScript types,
 here are the ones that don't:
-
-    var Long =      require('mongolian').Long       // goog.math.Long - http://closure-library.googlecode.com/svn/docs/class_goog_math_Long.html
-    var ObjectId =  require('mongolian').ObjectId   // new ObjectId(byteBuffer or hexString)
-    var Timestamp = require('mongolian').Timestamp  // == Long
-    var DBRef =     require('mongolian').DBRef      // not supported yet
-
+```javascript
+var Long =      require('mongolian').Long       // goog.math.Long - http://closure-library.googlecode.com/svn/docs/class_goog_math_Long.html
+var ObjectId =  require('mongolian').ObjectId   // new ObjectId(byteBuffer or hexString)
+var Timestamp = require('mongolian').Timestamp  // == Long
+var DBRef =     require('mongolian').DBRef      // not supported yet
+```
 GridFS
 ------
 The Mongo shell doesn't support gridfs, so Mongolian DeadBeef provides a custom Stream-based GridFS implementation.
 It consists of two main classes, `MongolianGridFS` and `MongolianGridFile`. You can get a MongolianGridFS object from a
 database with the `gridfs([gridfs name])` function.
+```javascript
+// Get a GridFS from a database
+var gridfs = db.gridfs() // name defaults to 'fs'
 
-    // Get a GridFS from a database
-    var gridfs = db.gridfs() // name defaults to 'fs'
+// Writing to GridFS consists of creating a GridFS file:
+var file = gridfs.create({
+    filename:"License",
+    contentType:"text/plain"
+})
+// And getting writable Stream (see http://nodejs.org/docs/v0.4/api/streams.html#writable_Stream )
+var stream = file.writeStream()
 
-    // Writing to GridFS consists of creating a GridFS file:
-    var file = gridfs.create({
-        filename:"License",
-        contentType:"text/plain"
-    })
-    // And getting writable Stream (see http://nodejs.org/docs/v0.4/api/streams.html#writable_Stream )
-    var stream = file.writeStream()
+// You can then pipe a local file to that stream easily with:
+fs.createReadStream('LICENSE').pipe(stream)
 
-    // You can then pipe a local file to that stream easily with:
-    fs.createReadStream('LICENSE').pipe(stream)
+// Reading a file from GridFS is similar:
+gridfs.findOne("License", function (err, file) {
+    if (!err && file) {
+        // Get the read stream:
+        var stream = file.readStream()
 
-    // Reading a file from GridFS is similar:
-    gridfs.findOne("License", function (err, file) {
-        if (!err && file) {
-            // Get the read stream:
-            var stream = file.readStream()
+        // You could then pipe the file out to a http response, for example:
+        stream.pipe(httpResponse)
+    }
+})
 
-            // You could then pipe the file out to a http response, for example:
-            stream.pipe(httpResponse)
-        }
-    })
+// You can access metadata fields from the file object:
+file.length // might be a Long
+file.chunkSize
+file.md5
+file.filename
+file.contentType // mime-type
+file.uploadDate
+// These two are optional and may not be defined:
+file.metadata
+file.aliases
 
-    // You can access metadata fields from the file object:
-    file.length // might be a Long
-    file.chunkSize
-    file.md5
-    file.filename
-    file.contentType // mime-type
-    file.uploadDate
-    // These two are optional and may not be defined:
-    file.metadata
-    file.aliases
-
-    // If you make any changes, save them:
-    file.save()
-
+// If you make any changes, save them:
+file.save()
+```
 Mongodb Shell Command Support
 -----------------------------
 
