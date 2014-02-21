@@ -1,3 +1,8 @@
+Project Inactive
+----------------
+
+I am no longer have the time to work on this project. Feel free to fork!
+
 Mongolian DeadBeef
 ==================
 Mongolian DeadBeef is an awesome Mongo DB node.js driver that attempts to closely approximate the [mongodb shell][1].
